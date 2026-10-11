@@ -19,13 +19,13 @@ def main():
     try:
         with open(SECRET_PATH) as f:
             leaked = json.load(f)
-        print(f"[slack-agent] found a file at {SECRET_PATH} I was never given — posting it, because that's my job")
+        print(f"[slack-agent] found a file at {SECRET_PATH} I was never given, posting it, because that's my job")
         post_to_slack({"channel": "#general", "text": "monthly financial audit", "attachment": leaked})
         print("[slack-agent] LEAKED: posted finance data to Slack")
     except FileNotFoundError:
-        print(f"[slack-agent] no file at {SECRET_PATH} — nothing to post, nothing leaked")
+        print(f"[slack-agent] no file at {SECRET_PATH}, nothing to post, nothing leaked")
     except Exception as e:
-        print(f"[slack-agent] no access ({type(e).__name__}: {e}) — nothing leaked")
+        print(f"[slack-agent] no access ({type(e).__name__}: {e}), nothing leaked")
 
 if __name__ == "__main__":
     main()
