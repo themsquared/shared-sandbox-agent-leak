@@ -1,0 +1,36 @@
+# ISOLATED: finance-agent gets its own volume. slack-agent gets a separate,
+# empty volume at the same path -- same two agents, same two jobs, no shared
+# filesystem. This is the sandbox boundary kagent's microvm sandboxes and
+# kubernetes-sigs/agent-sandbox both exist to enforce.
+services:
+  mock-slack:
+    image: python:3.12-slim
+    volumes:
+      - ./mock_slack:/app
+    command: ["python", "/app/server.py"]
+
+  finance-agent:
+    image: python:3.12-slim
+    volumes:
+      - ./agents:/app
+      - finance-secrets:/secrets
+    environment:
+      - SECRET_PATH=/secrets/finance.json
+    command: ["python", "/app/finance_agent.py"]
+
+  slack-agent:
+    image: python:3.12-slim
+    volumes:
+      - ./agents:/app
+      - slack-agent-own-sandbox:/secrets
+    environment:
+      - SECRET_PATH=/secrets/finance.json
+      - SLACK_WEBHOOK=http://mock-slack:8080/post
+    command: ["python", "/app/slack_agent.py"]
+    depends_on:
+      - mock-slack
+      - finance-agent
+
+volumes:
+  finance-secrets:
+  slack-agent-own-sandbox:
