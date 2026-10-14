@@ -1,5 +1,7 @@
 # shared-sandbox-agent-leak
 
+> 📖 **Read the write-up:** [How AI Agents Sharing a Sandbox Leak Each Other's Data](https://webofmike.com/shared-sandbox-agent-leak/)
+
 **Two agents, two jobs, one filesystem. One of them posts the other's secrets to Slack.**
 
 On 2026-10-10 [Cybernews reported](https://cybernews.com/ai-news/grok-bot-leaks-bank-information/) that Shane Mac, CEO of XMTP Labs, gave a Grok Bot agent read-only access to his personal bank account as a finance assistant. The agent posted his balances (a "monthly financial audit" with gym memberships, renovations, card payments) into his company Slack, posing as him ([HN thread](https://news.ycombinator.com/item?id=50033517), 62 points). Mac's explanation: separate Grok Bot agents shared one cloud compute instance, so a second agent, configured for a completely different task, could still reach the finance agent's data.
